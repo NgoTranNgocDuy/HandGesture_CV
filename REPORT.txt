@@ -2,14 +2,13 @@ HAND GESTURE CONTROL SYSTEM - TECHNICAL REPORT
 
 Project Title: Real-Time Hand Gesture Recognition and Control System
 Date: December 3, 2025
-Technology Stack: Python, OpenCV, MediaPipe, Flask, HTML/CSS/JavaScript
+Tech Stack used: Python, OpenCV, MediaPipe, Flask, HTML/CSS/JS
 
 ═══════════════════════════════════════════════════════════════════════════════
 
 1. EXECUTIVE SUMMARY
 
 This project presents a comprehensive hand gesture recognition system that leverages computer vision techniques to detect and interpret human hand gestures in real-time. The system employs a web-based interface to provide interactive visual feedback and control mechanisms, making it suitable for touchless human-computer interaction applications.
-
 The system successfully detects 9+ distinct hand gestures with high accuracy (85-95% confidence) and provides real-time visual and interactive controls through a modern web interface.
 
 ═══════════════════════════════════════════════════════════════════════════════
@@ -382,22 +381,6 @@ Challenge 4: Latency in Web Interface
 • Solution: Optimized update frequency and JPEG encoding quality
 • Result: Achieved <100ms end-to-end latency
 
-9.2 Design Decisions
-
-1. Rule-based vs. ML Classification:
-   • Decision: Chose rule-based approach
-   • Rationale: Transparency, speed, and easy customization
-   • Benefit: Simplified debugging and maintenance
-
-2. Web-based Interface:
-   • Decision: Browser-based UI instead of desktop application
-   • Rationale: Cross-platform compatibility and easy deployment
-   • Benefit: No additional software installation required
-
-3. MediaPipe Framework:
-   • Decision: Selected MediaPipe over custom model training
-   • Rationale: Proven accuracy, performance, and extensive documentation
-   • Benefit: GPU acceleration support and active maintenance
 
 ═══════════════════════════════════════════════════════════════════════════════
 
@@ -434,108 +417,15 @@ This Hand Gesture Control System successfully demonstrates the application of co
 The system achieves high accuracy (85-95%) with low latency (<100ms) and provides an intuitive, visually appealing interface suitable for demonstrations and practical applications.
 
 Key Achievements:
-✓ Real-time processing at 30 FPS
 ✓ 9+ gesture types with high confidence scores
 ✓ Dynamic finger counting capability
 ✓ Accurate distance-based controls
 ✓ Professional web interface with smooth animations
-✓ Multi-hand detection support
 
 Future Enhancements:
 • Deep learning-based custom gesture training
 • 3D gesture recognition using depth cameras
-• Multi-user support
-• Gesture recording and playback
 • Integration with operating system controls
 • Mobile device support
-
-═══════════════════════════════════════════════════════════════════════════════
-
-12. TECHNICAL SPECIFICATIONS
-
-Hardware Requirements:
-• Webcam (minimum 720p resolution)
-• Processor: Intel i3 or equivalent
-• RAM: 4GB minimum, 8GB recommended
-• Operating System: Windows 10/11, macOS, or Linux
-
-Software Dependencies:
-• Python 3.8 or higher
-• Flask 3.0.0
-• OpenCV 4.8.1
-• MediaPipe 0.10.8
-• NumPy 1.24.3
-
-Network Requirements:
-• Localhost access (no internet connection required)
-• Modern web browser (Chrome, Firefox, or Edge)
-• Port 5000 available for Flask server
-
-═══════════════════════════════════════════════════════════════════════════════
-
-13. REFERENCES
-
-1. MediaPipe Hands Solution - Google AI Research
-2. OpenCV Documentation - Video Processing and Computer Vision
-3. Flask Framework Documentation - Web Development in Python
-4. Computer Vision: Algorithms and Applications - Richard Szeliski
-5. Real-time Hand Gesture Recognition - IEEE Research Papers
-6. Human-Computer Interaction Principles - ACM Digital Library
-
-═══════════════════════════════════════════════════════════════════════════════
-
-APPENDIX A: GESTURE CLASSIFICATION MATRIX
-
-┌──────────────────────┬───────┬───────┬────────┬──────┬───────┬─────────────────────┐
-│ Gesture              │ Thumb │ Index │ Middle │ Ring │ Pinky │ Special Condition   │
-├──────────────────────┼───────┼───────┼────────┼──────┼───────┼─────────────────────┤
-│ Fist                 │   ✗   │   ✗   │   ✗    │  ✗   │   ✗   │ -                   │
-│ Pointing             │   ✗   │   ✓   │   ✗    │  ✗   │   ✗   │ -                   │
-│ Peace                │   ✓   │   ✓   │   ✓    │  ✗   │   ✗   │ -                   │
-│ Thumbs Up            │   ✓   │   ✗   │   ✗    │  ✗   │   ✗   │ -                   │
-│ OK Sign              │   -   │   -   │   ✓    │  ✓   │   ✓   │ Thumb-Index < 0.05  │
-│ Rock                 │   ✗   │   ✓   │   ✗    │  ✗   │   ✓   │ -                   │
-│ Volume Control       │   ✓   │   ✓   │   ✗    │  ✗   │   ✗   │ Distance measured   │
-│ Brightness Control   │   ✗   │   ✓   │   ✓    │  ✗   │   ✗   │ Distance measured   │
-└──────────────────────┴───────┴───────┴────────┴──────┴───────┴─────────────────────┘
-
-Legend: ✓ = Finger extended | ✗ = Finger closed | - = Not applicable
-
-═══════════════════════════════════════════════════════════════════════════════
-
-APPENDIX B: PERFORMANCE BENCHMARKS
-
-System Performance Metrics:
-
-Frame Processing:
-• Average FPS: 30.2 frames per second
-• Minimum FPS: 25.8 frames per second
-• Maximum FPS: 33.1 frames per second
-
-Latency Measurements:
-• Camera to Detection: 18-25ms
-• Detection to Classification: 8-12ms
-• Classification to Display: 45-60ms
-• Total End-to-End: 85-105ms
-
-Resource Utilization:
-• CPU Usage: 15-25% (Intel i5)
-• Memory Usage: 180-220 MB
-• GPU Usage: Minimal (MediaPipe CPU mode)
-• Network Bandwidth: 2-4 Mbps (local streaming)
-
-Accuracy by Lighting Condition:
-• Well-lit (>500 lux): 92-95%
-• Normal lighting (200-500 lux): 88-92%
-• Low light (<200 lux): 75-82%
-• Direct sunlight: 70-78% (glare interference)
-
-═══════════════════════════════════════════════════════════════════════════════
-
-Project Repository: c:\Users\user\OneDrive\Desktop\AI_Research
-Report Author: AI Research Team
-Date Compiled: December 3, 2025
-
-═══════════════════════════════════════════════════════════════════════════════
 
 END OF REPORT

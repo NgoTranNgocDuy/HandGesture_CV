@@ -9,13 +9,13 @@ python app.py
 ```
 ### Step 3: Open in Browser
 Once the server starts, open your web browser and navigate to port 5000
-## 🎮 How to Use
+##  How to Use
 1. **Allow Camera Access**: When prompted, allow the browser to access your webcam
 2. **Position Your Hand**: Place your hand in front of the camera
 3. **Make Gestures**: Try different hand gestures to see them recognized in real-time
 4. **Control Volume/Brightness**: Use pinch gestures to control virtual volume and brightness
 
-## 🛠️ Tech Stack
+##  Tech Stack
 - **Backend**: Flask (Python)
 - **Computer Vision**: OpenCV, MediaPipe
 - **Frontend**: HTML5, CSS3, JS
