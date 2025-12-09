@@ -62,14 +62,14 @@ def load_dl_model():
     
     model_path = Path('checkpoints')
     if not model_path.exists():
-        print("⚠ No trained model found. Using rule-based detection only.")
+        print(" No trained model found. Using rule-based detection only.")
         USE_DL_MODEL = False
         return
     
     # Find latest checkpoint
     checkpoints = list(model_path.glob('best_model*.pth'))
     if not checkpoints:
-        print("⚠ No trained model found. Using rule-based detection only.")
+        print(" No trained model found. Using rule-based detection only.")
         USE_DL_MODEL = False
         return
     
@@ -82,10 +82,10 @@ def load_dl_model():
         DL_MODEL.eval()
         
         USE_DL_MODEL = True
-        print(f"✓ Loaded DL model from {latest_checkpoint}")
+        print(f" Loaded DL model from {latest_checkpoint}")
         print(f"  Validation accuracy: {checkpoint.get('val_acc', 'N/A')}%")
     except Exception as e:
-        print(f"⚠ Error loading model: {e}")
+        print(f" Error loading model: {e}")
         print("  Falling back to rule-based detection")
         USE_DL_MODEL = False
 
