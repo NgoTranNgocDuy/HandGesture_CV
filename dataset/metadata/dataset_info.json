@@ -1,0 +1,41 @@
+{
+    "name": "Hand Gesture Recognition Dataset",
+    "version": "1.0",
+    "created": "2025-12-09T00:23:23.542542",
+    "classes": [
+        "thumbs_up",
+        "peace",
+        "fist",
+        "pointing",
+        "ok_sign",
+        "rock",
+        "one_finger",
+        "two_fingers",
+        "three_fingers",
+        "open_palm"
+    ],
+    "num_classes": 10,
+    "statistics": {
+        "thumbs_up": 0,
+        "peace": 0,
+        "fist": 23,
+        "pointing": 0,
+        "ok_sign": 0,
+        "rock": 0,
+        "one_finger": 0,
+        "two_fingers": 0,
+        "three_fingers": 0,
+        "open_palm": 0
+    },
+    "total_samples": 23,
+    "data_format": {
+        "images": "JPG, 640x480",
+        "landmarks": "NumPy array, shape (21, 3)",
+        "coordinates": "Normalized [0, 1] for x, y; relative depth for z"
+    },
+    "annotation": {
+        "landmarks_per_hand": 21,
+        "coordinates_per_landmark": 3,
+        "coordinate_system": "MediaPipe Hand Landmarks"
+    }
+}
