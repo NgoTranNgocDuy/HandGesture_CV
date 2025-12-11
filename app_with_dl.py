@@ -223,6 +223,12 @@ class HandGestureDetector:
                 gesture_idx = predicted.item()
                 confidence_pct = int(confidence.item() * 100)
                 
+                # If confidence is too low, fall back to rule-based
+                # This happens when model hasn't seen enough training data for that gesture
+                if confidence_pct < 70:
+                    print(f"⚠️ Low DL confidence ({confidence_pct}%), using rule-based fallback")
+                    return self.detect_gesture_rule_based(landmarks)
+                
                 gesture = DL_GESTURES[gesture_idx]
                 
                 current_gesture = f"{gesture} [DL]"
