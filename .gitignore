@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+
+# Trained models (too large for GitHub)
+checkpoints/
+*.pth
+*.pt
+*.ckpt
+
+# Dataset (too large for GitHub)
+dataset/images/
+dataset/landmarks/
+dataset/metadata/
+
+# Training results
+results/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
