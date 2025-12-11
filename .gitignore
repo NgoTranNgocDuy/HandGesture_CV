@@ -14,10 +14,17 @@ checkpoints/
 *.pt
 *.ckpt
 
-# Dataset (too large for GitHub)
-dataset/images/
-dataset/landmarks/
-dataset/metadata/
+# Dataset (too large for GitHub - but keep folder structure)
+dataset/images/*
+dataset/landmarks/*
+dataset/metadata/*
+
+# Keep the folder structure (don't ignore empty folders)
+!dataset/images/.gitkeep
+!dataset/landmarks/.gitkeep
+!dataset/metadata/.gitkeep
+!dataset/images/*/
+!dataset/landmarks/*/
 
 # Training results
 results/
