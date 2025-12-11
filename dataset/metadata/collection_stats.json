@@ -3,10 +3,10 @@
     "peace": 0,
     "fist": 23,
     "pointing": 0,
-    "ok_sign": 0,
+    "ok_sign": 200,
     "rock": 0,
     "one_finger": 0,
     "two_fingers": 0,
-    "three_fingers": 0,
+    "three_fingers": 200,
     "open_palm": 0
 }

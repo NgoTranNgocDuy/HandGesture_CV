@@ -218,20 +218,41 @@ class HandGestureDetector:
             with torch.no_grad():
                 outputs = DL_MODEL(image_tensor, landmark_tensor, mode='hybrid')
                 probs = torch.softmax(outputs, dim=1)
-                confidence, predicted = probs.max(1)
                 
-                gesture_idx = predicted.item()
-                confidence_pct = int(confidence.item() * 100)
+                # Get top 2 predictions to check confidence distribution
+                top2_probs, top2_indices = torch.topk(probs, k=2, dim=1)
                 
-                # If confidence is too low, fall back to rule-based
-                # This happens when model hasn't seen enough training data for that gesture
-                if confidence_pct < 70:
-                    print(f"⚠️ Low DL confidence ({confidence_pct}%), using rule-based fallback")
-                    return self.detect_gesture_rule_based(landmarks)
+                predicted = top2_indices[0][0].item()
+                confidence_pct = int(top2_probs[0][0].item() * 100)
+                second_conf = int(top2_probs[0][1].item() * 100)
                 
-                gesture = DL_GESTURES[gesture_idx]
+                # Get rule-based prediction for validation
+                rule_gesture, rule_conf = self.detect_gesture_rule_based(landmarks)
                 
-                current_gesture = f"{gesture} [DL]"
+                # ALWAYS use rule-based for undertrained models
+                # DL model with limited training data is unreliable
+                # Only use DL if confidence gap is HUGE (>50%) indicating strong learning
+                confidence_gap = confidence_pct - second_conf
+                
+                dl_gesture = DL_GESTURES[predicted]
+                
+                if confidence_gap < 50:
+                    # Not enough confidence gap - model is guessing
+                    print(f"⚠️ DL uncertain (top: {confidence_pct}%, 2nd: {second_conf}%), using rule-based: {rule_gesture}")
+                    return rule_gesture, rule_conf
+                
+                # Even with high confidence, validate against rule-based
+                # Extract base gesture names for comparison
+                dl_base = dl_gesture.split()[0].lower()
+                rule_base = rule_gesture.split()[0].lower()
+                
+                if dl_base != rule_base:
+                    # DL disagrees with rule-based - likely wrong due to limited training
+                    print(f"⚠️ DL ({dl_gesture}, {confidence_pct}%) conflicts with rule-based ({rule_gesture}), using rule-based")
+                    return rule_gesture, rule_conf
+                
+                # High confidence AND agrees with rule-based - safe to use
+                current_gesture = f"{dl_gesture} [DL]"
                 gesture_confidence = confidence_pct
                 
                 return current_gesture, gesture_confidence

@@ -50,10 +50,10 @@ class GestureTrainer:
         # Loss function
         self.criterion = nn.CrossEntropyLoss()
         
-        # Optimizer
+        # Optimizer (higher learning rate for faster convergence)
         self.optimizer = optim.AdamW(
             model.parameters(),
-            lr=0.001,
+            lr=0.003,  # Increased from 0.001 for faster training
             weight_decay=0.01,
             betas=(0.9, 0.999)
         )
@@ -63,7 +63,7 @@ class GestureTrainer:
             self.optimizer,
             mode='min',
             factor=0.5,
-            patience=5
+            patience=3  # Reduced from 5 for faster adjustments
         )
         
         # Training history
@@ -441,8 +441,8 @@ def main():
     # Load data
     train_loader, val_loader, test_loader = get_data_loaders(
         dataset_root='dataset',
-        batch_size=32,
-        num_workers=4
+        batch_size=16,  # Reduced for faster training with small dataset
+        num_workers=0   # 0 for Windows compatibility and faster small dataset loading
     )
     
     # Create model
@@ -457,8 +457,8 @@ def main():
         device=device
     )
     
-    # Train
-    trainer.train(num_epochs=50, early_stopping_patience=15)
+    # Train (minimal epochs for small dataset)
+    trainer.train(num_epochs=5, early_stopping_patience=3)
     
     # Test
     trainer.test()
