@@ -15,19 +15,36 @@ checkpoints/
 *.ckpt
 
 # Dataset (too large for GitHub - but keep folder structure)
-dataset/images/*
-dataset/landmarks/*
+dataset/images/**/*.jpg
+dataset/images/**/*.png
+dataset/images/**/*.jpeg
+dataset/landmarks/**/*.npy
+dataset/landmarks/**/*.pkl
 dataset/metadata/*
 
-# Keep the folder structure (don't ignore empty folders)
+# Detection dataset
+dataset/detection/images/**/*.jpg
+dataset/detection/images/**/*.png
+dataset/detection/annotations/**/*.txt
+dataset/detection/annotations/**/*.json
+
+# Keep the folder structure (keep .gitkeep files)
 !dataset/images/.gitkeep
 !dataset/landmarks/.gitkeep
 !dataset/metadata/.gitkeep
-!dataset/images/*/
-!dataset/landmarks/*/
+!dataset/detection/images/.gitkeep
+!dataset/detection/annotations/.gitkeep
 
 # Training results
 results/
+
+# Roboflow downloads (too large)
+roboflow_data/
+runs/
+
+# YOLOv8 models (too large)
+models/*.pt
+!models/__init__.py
 
 # IDE
 .vscode/

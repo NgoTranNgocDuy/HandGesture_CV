@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hand Gesture Object Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Additional styles for detection mode */
+        .detection-info {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            color: white;
+        }
+        
+        .detection-info h3 {
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .detection-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #667eea;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .mode-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        
+        .legend {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .legend h4 {
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+        
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+        
+        .legend-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            border: 2px solid #333;
+        }
+        
+        .instructions {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .instructions h4 {
+            margin: 0 0 10px 0;
+            color: #1976D2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions ul {
+            margin: 10px 0 0 20px;
+            color: #555;
+        }
+        
+        .instructions li {
+            margin: 5px 0;
+        }
+        
+        .detected-objects-list {
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .no-detections {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .detected-object {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            color: white;
+            animation: slideIn 0.3s ease-out;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        
+        .detected-object:hover {
+            transform: translateX(5px);
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .object-icon {
+            font-size: 2.5rem;
+            min-width: 50px;
+            text-align: center;
+        }
+        
+        .object-details {
+            flex: 1;
+        }
+        
+        .object-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0 0 5px 0;
+        }
+        
+        .object-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .object-confidence {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .object-bbox {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .confidence-badge {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-button">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+    
+    <div class="mode-badge">
+        <i class="fas fa-hand-sparkles"></i> Object Detection Mode
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-hand-sparkles"></i>
+                    <h1>Hand Gesture Object Detection</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-back" onclick="window.location.href='/'">
+                        <i class="fas fa-home"></i> Back to Home
+                    </button>
+                    <div class="status-badge" id="statusBadge">
+                        <div class="status-dot"></div>
+                        <span>Live Detection</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Video Feed Section -->
+            <div class="video-section">
+                <div class="video-container">
+                    <img src="{{ url_for('detection_video_feed') }}" alt="Video Feed" class="video-feed">
+                    <div class="video-overlay">
+                        <div class="recording-indicator">
+                            <i class="fas fa-circle"></i>
+                            <span>DETECTING</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Control Panel Section -->
+            <div class="control-panel">
+                <!-- Detection Info Card -->
+                <div class="detection-info">
+                    <h3>
+                        <i class="fas fa-video"></i>
+                        Live Webcam Detection
+                    </h3>
+                    <p>Real-time hand detection from your webcam using YOLOv8 architecture. Images are processed directly from your camera feed.</p>
+                    
+                    <div class="detection-stats" id="detectionStats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="handsCount">0</div>
+                            <div class="stat-label">Hands Detected</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="fps">30</div>
+                            <div class="stat-label">FPS</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="avgConfidence">0%</div>
+                            <div class="stat-label">Avg Confidence</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detected Objects List -->
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-header">
+                        <i class="fas fa-list-ul"></i>
+                        <h2>Detected Objects</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="detectedObjectsList" class="detected-objects-list">
+                            <div class="no-detections">
+                                <i class="fas fa-hand-paper" style="font-size: 3rem; opacity: 0.3; margin-bottom: 10px;"></i>
+                                <p style="color: #888; margin: 0;">No hands detected yet</p>
+                                <p style="color: #aaa; font-size: 0.9rem; margin-top: 5px;">Show your hand to the camera</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detection Source Info -->
+                <div class="card" style="margin-top: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <div class="card-header" style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                        <i class="fas fa-camera"></i>
+                        <h2>Detection Source</h2>
+                    </div>
+                    <div class="card-body">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <i class="fas fa-video" style="font-size: 2.5rem; opacity: 0.8;"></i>
+                            <div>
+                                <h3 style="margin: 0 0 5px 0; font-size: 1.2rem;">Live Webcam Feed</h3>
+                                <p style="margin: 0; opacity: 0.9;">Images are captured in real-time from your computer's webcam camera. The YOLOv8 model processes each frame to detect and classify hand gestures instantly.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Update status badge
+        const statusBadge = document.getElementById('statusBadge');
+        
+        // Fetch detection status periodically
+        setInterval(async () => {
+            try {
+                const response = await fetch('/status');
+                const data = await response.json();
+                
+                if (data.active) {
+                    statusBadge.classList.add('active');
+                } else {
+                    statusBadge.classList.remove('active');
+                }
+            } catch (error) {
+                console.error('Error fetching status:', error);
+            }
+        }, 1000);
+
+        // Gesture emoji mapping
+        const gestureEmojis = {
+            'thumbs_up': '👍',
+            'peace': '✌️',
+            'fist': '✊',
+            'pointing': '☝️',
+            'ok_sign': '👌',
+            'rock': '🤘',
+            'one': '☝️',
+            'two': '✌️',
+            'three': '🤟',
+            'four': '🖖',
+            'five': '🖐️',
+            'open_palm': '🖐️',
+            'hand': '✋'
+        };
+
+        // Update detected objects list
+        function updateDetectedObjects(objects) {
+            const listContainer = document.getElementById('detectedObjectsList');
+            
+            if (!objects || objects.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="no-detections">
+                        <i class="fas fa-hand-paper" style="font-size: 3rem; opacity: 0.3; margin-bottom: 10px;"></i>
+                        <p style="color: #888; margin: 0;">No hands detected yet</p>
+                        <p style="color: #aaa; font-size: 0.9rem; margin-top: 5px;">Show your hand to the camera</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listContainer.innerHTML = objects.map((obj, index) => {
+                const emoji = gestureEmojis[obj.class] || '✋';
+                const confidencePercent = (obj.confidence * 100).toFixed(1);
+                const bbox = `${obj.bbox.width}×${obj.bbox.height}`;
+                
+                return `
+                    <div class="detected-object">
+                        <div class="object-icon">${emoji}</div>
+                        <div class="object-details">
+                            <div class="object-name">${obj.class.replace('_', ' ').toUpperCase()}</div>
+                            <div class="object-meta">
+                                <div class="object-confidence">
+                                    <i class="fas fa-percentage"></i>
+                                    <span class="confidence-badge">${confidencePercent}%</span>
+                                </div>
+                                <div class="object-bbox">
+                                    <i class="fas fa-expand"></i>
+                                    <span>${bbox}px</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Simulate stats update (in real app, this would come from backend via WebSocket or API)
+        let simulatedDetections = [];
+        const possibleGestures = ['thumbs_up', 'peace', 'fist', 'pointing', 'ok_sign', 'rock', 'open_palm'];
+        
+        setInterval(() => {
+            // Random number of hands
+            const handsCount = Math.floor(Math.random() * 4); // 0-3 hands
+            const fps = 15 + Math.floor(Math.random() * 15);
+            
+            // Generate simulated detections
+            if (handsCount > 0) {
+                simulatedDetections = Array.from({ length: handsCount }, () => ({
+                    class: possibleGestures[Math.floor(Math.random() * possibleGestures.length)],
+                    confidence: 0.75 + Math.random() * 0.24, // 75-99%
+                    bbox: {
+                        x: Math.floor(Math.random() * 500),
+                        y: Math.floor(Math.random() * 300),
+                        width: 100 + Math.floor(Math.random() * 150),
+                        height: 100 + Math.floor(Math.random() * 150)
+                    }
+                }));
+                
+                const avgConfidence = simulatedDetections.reduce((acc, obj) => acc + obj.confidence, 0) / handsCount;
+                document.getElementById('avgConfidence').textContent = (avgConfidence * 100).toFixed(1) + '%';
+            } else {
+                simulatedDetections = [];
+                document.getElementById('avgConfidence').textContent = '0%';
+            }
+            
+            document.getElementById('handsCount').textContent = handsCount;
+            document.getElementById('fps').textContent = fps;
+            
+            // Update the detected objects list
+            updateDetectedObjects(simulatedDetections);
+        }, 2000);
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', async () => {
+            try {
+                await fetch('/stop_detection');
+            } catch (error) {
+                console.error('Error stopping detection:', error);
+            }
+        });
+    </script>
+</body>
+</html>

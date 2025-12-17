@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gesture Classification Mode</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-hand-paper"></i>
+                    <h1>Gesture Classification Mode</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-back" onclick="window.location.href='/'">
+                        <i class="fas fa-home"></i> Back to Home
+                    </button>
+                    <div class="status-badge" id="statusBadge">
+                        <div class="status-dot"></div>
+                        <span>Live</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Video Feed Section -->
+            <div class="video-section">
+                <div class="video-container">
+                    <img src="{{ url_for('gesture_video_feed') }}" alt="Video Feed" class="video-feed">
+                    <div class="video-overlay">
+                        <div class="recording-indicator">
+                            <i class="fas fa-circle"></i>
+                            <span>RECORDING</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Control Panel Section -->
+            <div class="control-panel">
+                <!-- Current Gesture Card -->
+                <div class="card gesture-card">
+                    <div class="card-header">
+                        <i class="fas fa-hand-pointer"></i>
+                        <h2>Current Gesture</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="gesture-display" id="gestureDisplay">
+                            <div class="gesture-icon">👋</div>
+                            <div class="gesture-name" id="gestureName">Waiting for gesture...</div>
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="confidence-label">
+                                <span>Confidence</span>
+                                <span id="confidenceValue">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="confidenceFill"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Volume Control Card -->
+                <div class="card control-card">
+                    <div class="card-header">
+                        <i class="fas fa-volume-up"></i>
+                        <h2>Volume Control</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="control-display">
+                            <div class="control-value" id="volumeValue">50%</div>
+                            <div class="control-bar">
+                                <div class="control-fill volume-fill" id="volumeFill"></div>
+                            </div>
+                            <div class="control-hint">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Stretch thumb & index finger apart</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Brightness Control Card -->
+                <div class="card control-card">
+                    <div class="card-header">
+                        <i class="fas fa-sun"></i>
+                        <h2>Brightness Control</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="control-display">
+                            <div class="control-value" id="brightnessValue">50%</div>
+                            <div class="control-bar">
+                                <div class="control-fill brightness-fill" id="brightnessFill"></div>
+                            </div>
+                            <div class="control-hint">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Stretch index & middle finger apart</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gesture History Card -->
+                <div class="card history-card">
+                    <div class="card-header">
+                        <i class="fas fa-history"></i>
+                        <h2>Gesture History</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="history-list" id="historyList">
+                            <div class="history-item">No gestures detected yet</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Supported Gestures Reference -->
+                <div class="card reference-card">
+                    <div class="card-header">
+                        <i class="fas fa-book"></i>
+                        <h2>Supported Gestures</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="gesture-grid">
+                            <div class="gesture-item">
+                                <span class="gesture-emoji">1️⃣-5️⃣</span>
+                                <span class="gesture-label">Finger Count</span>
+                            </div>
+                            <div class="gesture-item">
+                                <span class="gesture-emoji">✌️</span>
+                                <span class="gesture-label">Peace</span>
+                            </div>
+                            <div class="gesture-item">
+                                <span class="gesture-emoji">👍</span>
+                                <span class="gesture-label">Thumbs Up</span>
+                            </div>
+                            <div class="gesture-item">
+                                <span class="gesture-emoji">✊</span>
+                                <span class="gesture-label">Fist</span>
+                            </div>
+                            <div class="gesture-item">
+                                <span class="gesture-emoji">☝️</span>
+                                <span class="gesture-label">Pointing</span>
+                            </div>
+                            <div class="gesture-item">
+                                <span class="gesture-emoji">👌</span>
+                                <span class="gesture-label">OK Sign</span>
+                            </div>
+                            <div class="gesture-item">
+                                <span class="gesture-emoji">🤘</span>
+                                <span class="gesture-label">Rock</span>
+                            </div>
+                            <div class="gesture-item">
+                                <span class="gesture-emoji">🔊</span>
+                                <span class="gesture-label">Volume (👍+☝️)</span>
+                            </div>
+                            <div class="gesture-item">
+                                <span class="gesture-emoji">💡</span>
+                                <span class="gesture-label">Brightness (☝️+✌️)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Gesture Classification Mode - CNN-LSTM Hybrid Model (100% Accuracy)</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
