@@ -1,0 +1,6 @@
+
+ROBOFLOW_API_KEY=2g1f6zwUADZGv85FlOrI
+ROBOFLOW_WORKSPACE=object-detection-ftwx3
+ROBOFLOW_PROJECT=hand-gesture-gizg2-nek0g
+ROBOFLOW_VERSION=1
+  
